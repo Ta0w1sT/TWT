@@ -1,0 +1,171 @@
+3
+>
+ select Sname,Class_id from 学生表 
+ where sid in (
+ SELECT Student_id from 成绩表  
+ where Student_id != 10086&&Course_id = 1)
+
+4
+>
+
+
+5
+>
+
+select Course_id,max(number),min(number) from 成绩表 group by Course_id
+
+
+6
+>
+select Course_id,AVG(number) FROM 成绩表 group by Course_id order by AVG(number)
+
+
+select Course_id,100*sum(case
+ when number>=60
+ then 1 else 0
+ end)/count(*)
+from 成绩表 group by Course_id;
+
+
+7
+>
+select tname from 老师表 where tid in( 
+select Course_id FROM 成绩表 group by Course_id order by AVG(number) desc)
+
+
+8
+>
+(select Course_id,Student_id,number from 成绩表 where(Course_id = 1)
+ order by number desc limit 3) 
+ UNION 
+ (select Course_id,Student_id,number from 成绩表 where(Course_id = 2) 
+ order by number desc limit 3) 
+ UNION 
+ (select Course_id,Student_id,number from 成绩表 where(Course_id = 3)
+ order by number desc limit 3)
+
+
+9
+>
+select Course_id,count(1) from 成绩表 group by Course_id
+
+
+10**
+>
+
+ select Sname,Student_id from 学生表 left join 成绩表 
+ on (学生表.sid = 成绩表.Student_id) 
+ group by student_id having count(Course_id) = 1
+
+ 11
+ >
+ select count(Gender) from 学生表 group by Gender
+
+12
+>
+ select Sname from 学生表 where Sname like '张%'
+ 
+ 
+ 13
+ >
+ select Sname,count(*) from 学生表
+ where Sname in (
+ select Sname from 学生表
+ group by Sname
+ having(count(*))>1
+)
+
+14
+> 
+select Course_id,AVG(number) FROM 成绩表 
+group by Course_id order by 2,Course_id DESC
+
+
+15
+>
+select Sname,Student_id,AVG(number) from 学生表 left join 成绩表 
+on (学生表.sid = 成绩表.Student_id) 
+group by Sname having AVG(number)>85
+
+16
+>
+select Sname,number from 学生表 left join 成绩表 
+on (学生表.sid = 成绩表.Student_id) where Course_id in (
+select cid from 课程表 where Cname='体育')
+
+
+17
+>
+select Sname,Student_id from 学生表 left join 成绩表 
+on (学生表.sid = 成绩表.Student_id) 
+where Course_id = 3 and number>80
+
+18**
+>
+select Sname,max(number) from 学生表 left join 成绩表
+on (学生表.sid = 成绩表.Student_id) 
+where Course_id in (
+select tid from 老师表 where tname='李迪')
+UNION
+select Sname,max(number) from 学生表 right join 成绩表
+on (学生表.sid = 成绩表.Student_id) 
+where Course_id in (
+select tid from 老师表 where tname='李迪')
+
+
+
+19
+>
+
+select Cname,count(Course_id)from 课程表 right join 成绩表 
+on (课程表.Cname=成绩表.sid) group by Course_id
+
+
+
+20
+>
+select Student_id,Course_id,number from 成绩表 
+where number in (select number from 成绩表 
+group by number having count(*)>1)
+
+
+21
+>
+(select Course_id,Student_id,number from 成绩表 where(Course_id = 1)
+ order by number desc limit 2) 
+ UNION 
+ (select Course_id,Student_id,number from 成绩表 where(Course_id = 2) 
+ order by number desc limit 2) 
+ UNION 
+ (select Course_id,Student_id,number from 成绩表 where(Course_id = 3)
+ order by number desc limit 2)
+ 
+ 
+ 22
+ >
+ select Student_id from 成绩表 group by Student_id having count(Course_id)>1
+ 
+ 
+ 23
+ >
+ select Course_id,Cname from 课程表 right join 成绩表 
+ on (课程表.Cname=成绩表.sid)
+ group by Course_id having count(Course_id)=count(Student_id)
+ 
+ 
+ 
+ 24**
+ >
+ select Student_id,AVG(number) from 成绩表 where 
+ 
+ 
+ 25
+ >
+ select Student_id from 成绩表 
+ where (Course_id=2 and number<60) order by number desc
+ 
+ 
+ 26
+ >
+update 成绩表 set number = null 
+where (Course_id=1 and Student_id = 10087)
